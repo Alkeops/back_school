@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { FriendStudentsDto } from './dto/friend-students.dto';
+import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { StudentsService } from './students.service';
-import { CreateStudentDto } from './dto/create-student.dto';
-import { UpdateStudentDto } from './dto/update-student.dto';
+import { CreateStudentDto } from './dto/create-students.dto';
 
 @Controller('students')
 export class StudentsController {
@@ -17,14 +17,17 @@ export class StudentsController {
     return this.studentsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.studentsService.findOne(id);
+  @Get(':term')
+  findOne(@Param('term') term: string) {
+    return this.studentsService.findOne(term);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStudentDto: UpdateStudentDto) {
-    return this.studentsService.update(id, updateStudentDto);
+  @Post(':id/addFriend')
+  toggleFriend(
+    @Param('id') id: string,
+    @Body() friendStudentsDto: FriendStudentsDto,
+  ) {
+    return this.studentsService.toggleFriend(id, friendStudentsDto);
   }
 
   @Delete(':id')

@@ -1,6 +1,6 @@
 import { IsMongoId, IsNotEmpty } from 'class-validator';
 
-export class SubscriptionCourseDto {
+export class FriendStudentsDto {
   @IsNotEmpty()
   @IsMongoId()
   studentId: string;

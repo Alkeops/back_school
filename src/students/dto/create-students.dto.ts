@@ -1,4 +1,4 @@
-import { IsEmail, IsInt, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsInt, IsPositive, IsString, MinLength } from 'class-validator';
 
 export class CreateStudentDto {
   @IsString()
@@ -12,5 +12,6 @@ export class CreateStudentDto {
   @IsString()
   introduction: string;
   @IsInt()
+  @IsPositive()
   age: number;
 }

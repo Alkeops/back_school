@@ -9,7 +9,6 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model } from 'mongoose';
 import { CreateCourseDto } from './dto/create-course.dto';
-import { UpdateCourseDto } from './dto/update-course.dto';
 import { Course } from './entities/course.entity';
 
 @Injectable()
@@ -40,35 +39,40 @@ export class CoursesService {
   }
 
   async findAll() {
-    return await this.courseModel.find().exec();
+    return await this.courseModel.find();
   }
 
   async findOne(term: string) {
     let course: Course;
     if (isValidObjectId(term))
       course = await this.courseModel.findOne({ _id: term });
-    if (!course) course = await this.courseModel.findOne({ slug: term});
+    if (!course) course = await this.courseModel.findOne({ slug: term });
+    if (!course) throw new BadRequestException('Course not found');
     return course;
   }
 
   async toggleSubscription(id: string, subs: SubscriptionCourseDto) {
-    const course = await this.courseModel.findById(id).exec();
+    const course = await this.courseModel.findById(id);
     if (!course) throw new BadRequestException('Course not found');
 
     const student = await this.studentsService.findOne(subs.studentId);
     if (!student) throw new BadRequestException('Student not found');
-
-    if (course.students.includes(subs.studentId))
+    //Add student to course
+    if (course.students.includes(subs.studentId)) {
       course.students = course.students.filter(
         (student) => student !== subs.studentId,
       );
-    else course.students.push(subs.studentId);
-
+      student.courses = student.courses.filter((course) => course !== id);
+    } else {
+      course.students.push(subs.studentId);
+      student.courses.push(id);
+    }
+    await student.save();
     await course.save();
     return course;
   }
 
   async remove(id: string) {
-    return await this.courseModel.findByIdAndDelete(id).exec();
+    return await this.courseModel.findByIdAndDelete(id);
   }
 }
