@@ -6,16 +6,19 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, isValidObjectId } from 'mongoose';
+
 import { CreateStudentDto } from './dto/create-students.dto';
 import { FriendStudentsDto } from './dto/friend-students.dto';
 import { Student } from './entities/student.entity';
 
 @Injectable()
 export class StudentsService {
+
   constructor(
     @InjectModel(Student.name) private readonly studentModel: Model<Student>,
     private readonly logger: Logger,
   ) {}
+  
   async create(createStudentDto: CreateStudentDto) {
     createStudentDto.username = createStudentDto.username.toLowerCase();
     try {
@@ -61,7 +64,6 @@ export class StudentsService {
     if (!user || !friend) throw new BadRequestException('Users not found');
 
     //TODO refactor this
-    //Add friends
     if (user.friends.includes(friendStudentsDto.studentId)) {
       user.friends = user.friends.filter(
         (friend) => friend !== friendStudentsDto.studentId,

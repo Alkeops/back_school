@@ -1,9 +1,10 @@
-import { FriendStudentsDto } from './dto/friend-students.dto';
 import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+
 import { StudentsService } from './students.service';
 import { CreateStudentDto } from './dto/create-students.dto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Student } from './entities/student.entity';
+import { FriendStudentsDto } from './dto/friend-students.dto';
 
 @ApiTags('Students')
 @Controller('students')

@@ -1,18 +1,20 @@
-import { SubscriptionCourseDto } from './dto/subscription-course.dto';
-import { StudentsService } from './../students/students.service';
+import { InjectModel } from '@nestjs/mongoose';
 import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model } from 'mongoose';
+
+import { StudentsService } from './../students/students.service';
+import { SubscriptionCourseDto } from './dto/subscription-course.dto';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { Course } from './entities/course.entity';
 
 @Injectable()
 export class CoursesService {
+  
   constructor(
     @InjectModel(Course.name) private readonly courseModel: Model<Course>,
     private readonly studentsService: StudentsService,
